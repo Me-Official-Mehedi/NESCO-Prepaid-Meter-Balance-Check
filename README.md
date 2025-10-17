@@ -125,8 +125,7 @@ Click Run workflow to test immediately.
 Check your Telegram — your bot should send the balance message.
 
 ## 📂 Project Structure
-<img width="662" height="353" alt="image" src="https://github.com/user-attachments/assets/f9708592-5d54-4485-a9fd-01a48f3fc910" />
-
+<img width="355" height="224" alt="image" src="https://github.com/user-attachments/assets/c16af960-fc60-4481-96b0-760b25633694" />
 
 ## 💡 Tips
 
