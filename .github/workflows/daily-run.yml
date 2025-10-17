@@ -1,0 +1,35 @@
+name: Daily NESCO Balance Check
+
+on:
+  workflow_dispatch:  # Keep for manual tests
+  schedule:
+    - cron: '*/1 * * * *'  # Every 5 minutes for testing (UTC)
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 python-telegram-bot
+
+      - name: Debug info
+        run: |
+          echo "UTC Time: $(date)"
+          echo "Workflow triggered by: ${{ github.event_name }}"
+
+      - name: Run the script
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          CUST_NO: ${{ secrets.CUST_NO }}
+        run: python script.py
