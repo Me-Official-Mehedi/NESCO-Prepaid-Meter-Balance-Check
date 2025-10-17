@@ -223,3 +223,55 @@ except Exception as e:
     except:
         pass
     raise
+
+
+name: NESCO Balance Monitor
+
+on:
+  schedule:
+    # For Bangladesh Time (UTC+6):
+    # 10:00 AM BDT = 4:00 AM UTC
+    # 4:00 PM BDT = 10:00 AM UTC  
+    # 10:00 PM BDT = 4:00 PM UTC
+    - cron: '0 4,10,16 * * *'  # 3 times daily for low balance coverage
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  monitor-balance:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4 python-telegram-bot
+        
+    - name: Run balance check
+      env:
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+        CUST_NO: ${{ secrets.CUST_NO }}
+      run: python nesco_monitor.py
+      
+    - name: Commit state file for persistence
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add nesco_state.json || echo "No state file to add"
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update NESCO state [skip ci]" || echo "No changes to commit"
+          git push || echo "Push failed or no changes"
+        fi
+      continue-on-error: true
