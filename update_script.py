@@ -189,3 +189,57 @@ except Exception as e:
     print(error_msg)
     asyncio.run(bot.send_message(chat_id=CHAT_ID, text=error_msg))
     raise
+
+
+
+
+name: NESCO Balance Monitor
+
+on:
+  schedule:
+    # Run twice daily at 8AM and 8PM UTC (adjust for your timezone)
+    - cron: '0 8,20 * * *'
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  monitor-balance:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4 python-telegram-bot
+        
+    - name: Create state directory
+      run: mkdir -p .github/state
+      
+    - name: Run balance check
+      env:
+        BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        CHAT_ID: ${{ secrets.CHAT_ID }}
+        CUST_NO: ${{ secrets.CUST_NO }}
+      run: python nesco_monitor.py  # Replace with your script filename
+      
+    - name: Commit state file (optional - for persistence)
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add nesco_state.json
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update NESCO state [skip ci]"
+          git push
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      continue-on-error: true
