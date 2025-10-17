@@ -51,7 +51,7 @@ Do **not** store sensitive info directly in your code. Use **GitHub Secrets**:
 
 | Secret Name | Value | Description |
 |------------|-------|------------|
-| `BOT_TOKEN` | Your Telegram Bot Token | e.g., `8208090466:AAHfPXa64FYmR_OHJxgRKbYV_S5Xcfhftfydty` |
+| `BOT_TOKEN` | Your Telegram Bot Token | e.g., `8208090466:AAHfPXa64FYmR_OHJxV_S5Xcfhftfydty` |
 | `CHAT_ID` | Your Telegram Chat ID | e.g., `1609615864` |
 | `CUST_NO` | Your Prepaid Meter Consumer Number | e.g., `11900874` |
 
