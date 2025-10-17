@@ -87,10 +87,10 @@ if not time_info:
 # 5) Prepare and send message asynchronously
 async def send_telegram():
     message = (
-        f"💡 NESCO Meter Info\n\n"
+        f"💡 NESCO Prepaid Meter Info\n\n"
         f"🔢 Customer No: {CUST_NO}\n"
         f"💰 Balance: {balance} Taka\n"
-        f"🕒 Balance Update Date & Time: {time_info}"
+        f"🕒 Balance Update Date & Time: \n {time_info}"
     )
     await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="Markdown")
 
