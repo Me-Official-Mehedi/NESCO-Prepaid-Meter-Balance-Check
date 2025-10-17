@@ -3,7 +3,7 @@ name: Daily NESCO Balance Check
 on:
   workflow_dispatch:  # Keep for manual tests
   schedule:
-    - cron: '*/1 * * * *'  # Every 5 minutes for testing (UTC)
+    - cron: '*/1 * * * *'  # Every 1 minutes for testing (UTC)
 
 jobs:
   run-script:
