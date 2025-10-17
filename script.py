@@ -90,7 +90,7 @@ async def send_telegram():
         f"💡 NESCO Meter Info\n\n"
         f"🔢 Customer No: {CUST_NO}\n"
         f"💰 Balance: {balance} Taka\n"
-        f"🕒 Time: {time_info}"
+        f"🕒 Balance Update Date & Time: {time_info}"
     )
     await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="Markdown")
 
