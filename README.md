@@ -144,6 +144,9 @@ For issues, please open a GitHub Issue in the repository...
 
 ## Dev Contact
 Name: Md. Mehedi Hasan
+
 Email: hasanmehedi04286@gamil.com
+
 Mobile: 01796890184
+
 HRO: HRO-8168
