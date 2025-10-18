@@ -141,3 +141,9 @@ Customize Python script to add more functionality like notifications for low bal
 ## ❤️ Support
 
 For issues, please open a GitHub Issue in the repository...
+
+## Dev Contact
+Name: Md. Mehedi Hasan
+Email: hasanmehedi04286@gamil.com
+Mobile: 01796890184
+HRO: HRO-8168
