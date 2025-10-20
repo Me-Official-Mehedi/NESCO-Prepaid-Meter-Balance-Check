@@ -100,3 +100,42 @@ asyncio.run(send_telegram())
 print("Customer:", CUST_NO)
 print("Balance:", balance)
 print("Time:", time_info)
+
+
+# Workflow code
+
+name: Daily NESCO Balance Check
+
+on:
+  workflow_dispatch:  # Keep for manual tests
+  schedule:
+    - cron: '0 4 * * *'  # Runs at 4:00 AM UTC daily (which is 10:00 AM BST).
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 python-telegram-bot
+
+      - name: Debug info
+        run: |
+          echo "UTC Time: $(date)"
+          echo "Workflow triggered by: ${{ github.event_name }}"
+
+      - name: Run the script
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          CUST_NO: ${{ secrets.CUST_NO }}
+        run: python script.py
