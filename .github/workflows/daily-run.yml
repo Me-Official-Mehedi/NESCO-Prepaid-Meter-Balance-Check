@@ -1,11 +1,11 @@
-name: Daily NESCO Balance Check (Single)
+name: NESCO Multi-Meter Balance Check
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 4 * * *'   # 10:00 AM BST (daily)
-    - cron: '0 8 * * *'   # 2:00 PM BST (low balance check)
-    - cron: '0 14 * * *'  # 8:00 PM BST (low balance check)
+    - cron: '0 4 * * *'
+    - cron: '0 8 * * *'
+    - cron: '0 14 * * *'
 
 jobs:
   run-script:
@@ -28,5 +28,5 @@ jobs:
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-          CUST_NO: ${{ secrets.CUST_NO }}
+          CUST_LIST: ${{ secrets.CUST_LIST }}  # Comma-separated list
         run: python script.py
