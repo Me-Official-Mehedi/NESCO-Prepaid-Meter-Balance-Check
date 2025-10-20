@@ -21,7 +21,10 @@ session = requests.Session()
 # ====== Utility to escape MarkdownV2 ======
 def escape_md(text):
     escape_chars = r'\_*[]()~`>#+-=|{}.!'
-    return re.sub(f'([{re.escape(escape_chars)}])', r'\\\1', str(text))
+    text = str(text)
+    # replace em dash with normal dash
+    text = text.replace("—", "-")
+    return re.sub(f'([{re.escape(escape_chars)}])', r'\\\1', text)
 
 # ====== Fetch balance and update time with retry ======
 def get_balance_and_time(cust_no, retries=3, delay=5):
@@ -91,15 +94,17 @@ async def send_summary(results):
             )
         elif balance <= 50:
             low_balance_list.append((cust_md, balance, time_md))
+            balance_msg = escape_md(f"{balance:.2f} Taka - LOW! ⚠️")
             message += (
                 f"⚠️ *Meter:* `{cust_md}`\n"
-                f"💰 *Balance:* *{balance:.2f} Taka — LOW! ⚠️*\n"
+                f"💰 *Balance:* *{balance_msg}*\n"
                 f"🕒 *Updated:* {time_md}\n\n"
             )
         else:
+            balance_msg = escape_md(f"{balance:.2f} Taka")
             message += (
                 f"✅ *Meter:* `{cust_md}`\n"
-                f"💰 *Balance:* {balance:.2f} Taka\n"
+                f"💰 *Balance:* {balance_msg}\n"
                 f"🕒 *Updated:* {time_md}\n\n"
             )
 
@@ -112,9 +117,10 @@ async def send_summary(results):
     if low_balance_list:
         alert_msg = "*🚨 LOW BALANCE ALERT!*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
         for cust_no, balance, time_info in low_balance_list:
+            balance_msg = escape_md(f"{balance:.2f} Taka")
             alert_msg += (
                 f"⚠️ *Meter:* `{cust_no}`\n"
-                f"💰 *Current Balance:* *{balance:.2f} Taka*\n"
+                f"💰 *Current Balance:* *{balance_msg}*\n"
                 f"🕒 *Updated:* {time_info}\n\n"
             )
         alert_msg += "❌ Please recharge soon to avoid power cut ⚡"
