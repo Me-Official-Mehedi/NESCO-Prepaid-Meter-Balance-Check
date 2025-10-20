@@ -13,7 +13,6 @@ URL = "https://customer.nesco.gov.bd/pre/panel"
 # Comma-separated customer numbers (e.g., "11900874,12345678,87654321")
 CUST_NUMBERS = os.environ.get('CUST_NO', '11900873,11900874').split(',')
 
-# Initialize Telegram bot and HTTP session
 bot = Bot(token=BOT_TOKEN)
 session = requests.Session()
 
@@ -34,7 +33,7 @@ def get_balance_and_time(cust_no):
         post = session.post(URL, data=data, timeout=20)
         soup = BeautifulSoup(post.text, "html.parser")
 
-        # Get balance value
+        # Extract balance
         inputs = soup.find_all("input", attrs={"disabled": True})
         balance = None
         if inputs:
@@ -44,7 +43,7 @@ def get_balance_and_time(cust_no):
             except ValueError:
                 balance = None
 
-        # Get updated time
+        # Extract last update info
         time_info = None
         labels = soup.find_all("label")
         for lab in labels:
@@ -61,14 +60,14 @@ def get_balance_and_time(cust_no):
         return None, None
 
 
-# ====== Send nicely formatted Telegram message ======
+# ====== Send formatted Telegram summary ======
 async def send_summary(results):
     message = (
         "💡 *NESCO Multi-Meter Summary*\n"
         "━━━━━━━━━━━━━━━━━━━━━━━\n"
     )
 
-    low_balance_found = False  # to highlight if any meter is low
+    low_balance_list = []  # store (cust_no, balance, time_info)
 
     for cust_no, balance, time_info in results:
         if balance is None:
@@ -77,31 +76,35 @@ async def send_summary(results):
                 f"🔸 *Status:* Could not fetch balance.\n\n"
             )
         elif balance <= 50:
-            low_balance_found = True
+            low_balance_list.append((cust_no, balance, time_info))
             message += (
                 f"⚠️ *Meter:* `{cust_no}`\n"
                 f"💰 *Balance:* *{balance:.2f} Taka — LOW! ⚠️*\n"
-                f"🕒 *Updated:* \n {time_info}\n\n"
+                f"🕒 *Updated:* {time_info}\n\n"
             )
         else:
             message += (
                 f"✅ *Meter:* `{cust_no}`\n"
                 f"💰 *Balance:* {balance:.2f} Taka\n"
-                f"🕒 *Updated:* \n {time_info}\n\n"
+                f"🕒 *Updated:* {time_info}\n\n"
             )
 
     message += "━━━━━━━━━━━━━━━━━━━━━━━\n📅 *Auto Updated by NESCO Bot*"
 
-    # Send summary
+    # Send main summary
     await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="Markdown")
 
-    # Send extra alert if low balance found
-    if low_balance_found:
-        alert_msg = (
-            "🚨 *LOW BALANCE ALERT!*\n"
-            "One or more meters are below 50 Taka ⚠️\n"
-            "Please recharge soon to avoid power cut."
-        )
+    # Send extra low balance alert with details
+    if low_balance_list:
+        alert_msg = "🚨 *LOW BALANCE ALERT!*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
+        for cust_no, balance, time_info in low_balance_list:
+            alert_msg += (
+                f"⚠️ *Meter:* `{cust_no}`\n"
+                f"💰 *Current Balance:* *{balance:.2f} Taka*\n"
+                f"🕒 *Updated:* {time_info}\n\n"
+            )
+        alert_msg += "━━━━━━━━━━━━━━━━━━━━━━━\nPlease recharge soon to avoid power cut ⚡"
+
         await bot.send_message(chat_id=CHAT_ID, text=alert_msg, parse_mode="Markdown")
 
 
@@ -113,7 +116,6 @@ def main():
         if cust:
             bal, time_info = get_balance_and_time(cust)
             results.append((cust, bal, time_info))
-
     asyncio.run(send_summary(results))
 
 
