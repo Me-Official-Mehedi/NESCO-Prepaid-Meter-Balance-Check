@@ -4,37 +4,31 @@ import requests
 from bs4 import BeautifulSoup
 from telegram import Bot
 import os
-from datetime import datetime, timezone, timedelta
 
-# ====== Config ======
 BOT_TOKEN = os.environ['BOT_TOKEN']
 CHAT_ID = os.environ['CHAT_ID']
-CUST_NO = os.environ.get('CUST_NO', '11900874')
 URL = "https://customer.nesco.gov.bd/pre/panel"
-# ====================
+
+# Comma-separated customer numbers (e.g., "11900874,12345678,87654321")
+CUST_NUMBERS = os.environ.get('CUST_LIST', '11900873', '11900874').split(',')
 
 bot = Bot(token=BOT_TOKEN)
 session = requests.Session()
 
 def get_balance_and_time(cust_no):
-    """Fetch balance and time info for a customer number"""
     resp = session.get(URL, timeout=20)
-    resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
-
     token_input = soup.find("input", {"name": "_token"})
     token = token_input["value"] if token_input else None
     if not token:
-        raise Exception("CSRF token not found")
+        return None, None
 
     data = {"_token": token, "cust_no": cust_no, "submit": "রিচার্জ হিস্ট্রি"}
     post = session.post(URL, data=data, timeout=20)
-    post.raise_for_status()
     soup = BeautifulSoup(post.text, "html.parser")
 
-    # Extract balance
-    balance = None
     inputs = soup.find_all("input", attrs={"disabled": True})
+    balance = None
     if inputs:
         val = (inputs[-1].get("value") or "").strip().replace("\xa0", "").replace(",", "")
         try:
@@ -42,7 +36,6 @@ def get_balance_and_time(cust_no):
         except ValueError:
             balance = None
 
-    # Extract time
     time_info = None
     labels = soup.find_all("label")
     for lab in labels:
@@ -52,43 +45,27 @@ def get_balance_and_time(cust_no):
                 time_info = span.get_text(strip=True)
             break
 
-    if not time_info:
-        spans = soup.find_all("span")
-        for sp in spans:
-            t = sp.get_text(strip=True)
-            if re.search(r'\d{4}|\d{1,2}\s+\w+\s+\d{4}', t):
-                time_info = t
-                break
-
     return balance, time_info or "N/A"
 
-async def send_message(balance, time_info):
-    """Send Telegram message with appropriate alert"""
-    if balance is None:
-        text = f"⚠ Could not fetch balance for Customer {CUST_NO}."
-    elif balance <= 50:
-        text = (
-            "⚠️ *Low Balance Alert!*\n\n"
-            f"💡 *NESCO Prepaid Meter Info*\n\n"
-            f"🔢 Customer No: `{CUST_NO}`\n"
-            f"💰 *Balance:* {balance:.2f} Taka\n"
-            f"🕒 *Last Updated:* {time_info}\n\n"
-            f"🚨 Please Recharge Soon!"
-        )
-    else:
-        text = (
-            f"💡 *NESCO Prepaid Meter Info*\n\n"
-            f"🔢 Customer No: `{CUST_NO}`\n"
-            f"💰 Balance: {balance:.2f} Taka\n"
-            f"🕒 Balance Update Date & Time: {time_info}"
-        )
-
-    await bot.send_message(chat_id=CHAT_ID, text=text, parse_mode="Markdown")
+async def send_summary(results):
+    message = "💡 *NESCO Multi-Meter Summary*\n\n"
+    for cust_no, balance, time_info in results:
+        if balance is None:
+            message += f"❌ `{cust_no}`: Could not fetch balance.\n"
+        elif balance <= 50:
+            message += f"⚠️ `{cust_no}` → {balance:.2f} Taka (Low Balance!)\n🕒 {time_info}\n\n"
+        else:
+            message += f"✅ `{cust_no}` → {balance:.2f} Taka\n🕒 {time_info}\n\n"
+    await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="Markdown")
 
 def main():
-    balance, time_info = get_balance_and_time(CUST_NO)
-    asyncio.run(send_message(balance, time_info))
-    print(f"Customer: {CUST_NO}\nBalance: {balance}\nTime: {time_info}")
+    results = []
+    for cust in CUST_NUMBERS:
+        cust = cust.strip()
+        if cust:
+            bal, time_info = get_balance_and_time(cust)
+            results.append((cust, bal, time_info))
+    asyncio.run(send_summary(results))
 
 if __name__ == "__main__":
     main()
