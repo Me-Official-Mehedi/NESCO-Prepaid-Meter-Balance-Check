@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from telegram import Bot
 import os
+from datetime import datetime
 
 # ====== Configuration ======
 BOT_TOKEN = os.environ['BOT_TOKEN']
@@ -50,7 +51,13 @@ def get_balance_and_time(cust_no):
             if "অবশিষ্ট ব্যালেন্স" in lab.get_text():
                 span = lab.find("span")
                 if span:
-                    time_info = span.get_text(strip=True)
+                    raw_time = span.get_text(strip=True)  # e.g. "20 October 2025 12:00:00 AM"
+                    # ===== Format Date =====
+                    try:
+                        dt = datetime.strptime(raw_time, "%d %B %Y %I:%M:%S %p")
+                        time_info = dt.strftime("%d %b %I:%M %p")  # e.g., "20 Oct 12:00 AM"
+                    except Exception:
+                        time_info = raw_time  # fallback if parsing fails
                 break
 
         return balance, time_info or "N/A"
@@ -103,7 +110,7 @@ async def send_summary(results):
                 f"💰 *Current Balance:* *{balance:.2f} Taka*\n"
                 f"🕒 *Updated:* {time_info}\n\n"
             )
-        alert_msg += "━━━━━━━━━━━━━━━━━━━━━━━\nPlease recharge soon to avoid power cut ⚡"
+        alert_msg += "❌ Please recharge soon to avoid power cut ⚡"
 
         await bot.send_message(chat_id=CHAT_ID, text=alert_msg, parse_mode="Markdown")
 
