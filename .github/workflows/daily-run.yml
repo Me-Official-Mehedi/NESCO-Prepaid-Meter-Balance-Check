@@ -1,21 +1,19 @@
 name: NESCO Multi-Meter Balance Check
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # Keep for manual tests
   schedule:
-    - cron: '0 4 * * *'
-    - cron: '0 8 * * *'
-    - cron: '0 14 * * *'
+    - cron: '0 4 * * *'  # Runs at 4:00 AM UTC daily (which is 10:00 AM BST).
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -24,9 +22,14 @@ jobs:
         run: |
           pip install requests beautifulsoup4 python-telegram-bot
 
-      - name: Run script
+      - name: Debug info
+        run: |
+          echo "UTC Time: $(date)"
+          echo "Workflow triggered by: ${{ github.event_name }}"
+
+      - name: Run the script
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-          CUST_LIST: ${{ secrets.CUST_LIST }}  # Comma-separated list
+          CUST_NO: ${{ secrets.CUST_NO }}
         run: python script.py
