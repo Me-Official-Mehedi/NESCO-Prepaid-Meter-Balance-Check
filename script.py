@@ -1,18 +1,18 @@
 import re
-import asyncio
 import requests
 from bs4 import BeautifulSoup
 from telegram import Bot
 import os
 from datetime import datetime
+import asyncio
 
 # ====== Configuration ======
 BOT_TOKEN = os.environ['BOT_TOKEN']
 CHAT_ID = os.environ['CHAT_ID']
 URL = "https://customer.nesco.gov.bd/pre/panel"
 
-# Comma-separated customer numbers (e.g., "11900874,12345678,87654321")
-CUST_NUMBERS = os.environ.get('CUST_NO', '11900873,11900874').split(',')
+# Single customer number
+CUST_NO = os.environ.get('CUST_NO', '11900873')
 
 bot = Bot(token=BOT_TOKEN)
 session = requests.Session()
@@ -51,13 +51,12 @@ def get_balance_and_time(cust_no):
             if "অবশিষ্ট ব্যালেন্স" in lab.get_text():
                 span = lab.find("span")
                 if span:
-                    raw_time = span.get_text(strip=True)  # e.g. "20 October 2025 12:00:00 AM"
-                    # ===== Format Date =====
+                    raw_time = span.get_text(strip=True)
                     try:
                         dt = datetime.strptime(raw_time, "%d %B %Y %I:%M:%S %p")
-                        time_info = dt.strftime("%d %b %I:%M %p")  # e.g., "20 Oct 12:00 AM"
+                        time_info = dt.strftime("%d %b %I:%M %p")
                     except Exception:
-                        time_info = raw_time  # fallback if parsing fails
+                        time_info = raw_time
                 break
 
         return balance, time_info or "N/A"
@@ -68,61 +67,48 @@ def get_balance_and_time(cust_no):
 
 
 # ====== Send formatted Telegram summary ======
-async def send_summary(results):
-    message = (
-        "💡 *NESCO Multi-Meter Summary*\n"
-        "━━━━━━━━━━━━━━━━━━━━━━━\n"
-    )
+async def send_summary(cust_no, balance, time_info):
+    message = "💡 *NESCO Single Meter Summary*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
+    low_balance_alert = False
 
-    low_balance_list = []  # store (cust_no, balance, time_info)
-
-    for cust_no, balance, time_info in results:
-        if balance is None:
-            message += (
-                f"❌ *Meter:* {cust_no}\n"
-                f"🔸 *Status:* Could not fetch balance.\n\n"
-            )
-        elif balance <= 50:
-            low_balance_list.append((cust_no, balance, time_info))
-            message += (
-                f"⚠️ *Meter:* {cust_no}\n"
-                f"💰 *Balance:* *{balance:.2f} Taka — LOW! ⚠️*\n"
-                f"🕒 *Updated:* {time_info}\n\n"
-            )
-        else:
-            message += (
-                f"✅ *Meter:* {cust_no}\n"
-                f"💰 *Balance:* {balance:.2f} Taka\n"
-                f"🕒 *Updated:* {time_info}\n\n"
-            )
+    if balance is None:
+        message += (
+            f"❌ *Meter:* {cust_no}\n"
+            f"🔸 *Status:* Could not fetch balance.\n\n"
+        )
+    elif balance <= 50:
+        low_balance_alert = True
+        message += (
+            f"⚠️ *Meter:* {cust_no}\n"
+            f"💰 *Balance:* *{balance:.2f} Taka — LOW! ⚠️*\n"
+            f"🕒 *Updated:* {time_info}\n\n"
+        )
+    else:
+        message += (
+            f"✅ *Meter:* {cust_no}\n"
+            f"💰 *Balance:* {balance:.2f} Taka\n"
+            f"🕒 *Updated:* {time_info}\n\n"
+        )
 
     message += "🤖 Auto Update via [Mehedi's](https://www.facebook.com/Me.OfficialMehedi) Bot"
-
-    # Send main summary
     await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="Markdown")
 
-    # Send extra low balance alert with details
-    if low_balance_list:
-        alert_msg = "🚨 *LOW BALANCE ALERT!*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
-        for cust_no, balance, time_info in low_balance_list:
-            alert_msg += (
-                f"⚠️ *Meter:* {cust_no}\n"
-                f"💰 *Current Balance:* *{balance:.2f} Taka*\n"
-                f"🕒 *Updated:* {time_info}\n\n"
-            )
-        alert_msg += "❌ Please recharge soon to avoid power cut ⚡"
+    # Separate LOW BALANCE ALERT message
+    if low_balance_alert:
+        alert_msg = (
+            "🚨 *LOW BALANCE ALERT!*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"⚠️ *Meter:* {cust_no}\n"
+            f"💰 *Current Balance:* *{balance:.2f} Taka*\n"
+            f"🕒 *Updated:* {time_info}\n\n"
+            "❌ Please recharge soon to avoid power cut ⚡"
+        )
         await bot.send_message(chat_id=CHAT_ID, text=alert_msg, parse_mode="Markdown")
 
 
 # ====== Main Runner ======
 def main():
-    results = []
-    for cust in CUST_NUMBERS:
-        cust = cust.strip()
-        if cust:
-            bal, time_info = get_balance_and_time(cust)
-            results.append((cust, bal, time_info))
-    asyncio.run(send_summary(results))
+    balance, time_info = get_balance_and_time(CUST_NO)
+    asyncio.run(send_summary(CUST_NO, balance, time_info))
 
 
 if __name__ == "__main__":
