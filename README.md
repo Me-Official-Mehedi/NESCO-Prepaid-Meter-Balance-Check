@@ -109,7 +109,7 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
           CUST_NO: ${{ secrets.CUST_NO }}
-        run: python script.py
+        run: python script.py// Change as per project structure
 ```
 > This workflow runs your script daily at the specified UTC time. Use crontab.guru
  to customize schedule.
@@ -126,7 +126,9 @@ Check your Telegram — your bot should send the balance message.
 
 ## 📂 Project Structure
 <img width="355" height="224" alt="image" src="https://github.com/user-attachments/assets/c16af960-fc60-4481-96b0-760b25633694" />
+```
 >  This one old structure. Follow present one
+```
 
 ## 🖥️ Output
 ![WhatsApp Image 2025-10-18 at 11 19 46_5517e4ad](https://github.com/user-attachments/assets/eaf203af-334d-47c1-ab6b-ad9348cac7f8)
