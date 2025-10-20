@@ -17,7 +17,6 @@ CUST_NUMBERS = os.environ.get('CUST_NO', '11900873,11900874').split(',')
 bot = Bot(token=BOT_TOKEN)
 session = requests.Session()
 
-
 # ====== Fetch balance and update time ======
 def get_balance_and_time(cust_no):
     try:
@@ -86,13 +85,13 @@ async def send_summary(results):
             low_balance_list.append((cust_no, balance, time_info))
             message += (
                 f"⚠️ *Meter:* `{cust_no}`\n"
-                f"💰 *Balance:* 🔴 *{balance:.2f} Taka — LOW! ⚠️*\n"
+                f"💰 *Balance:* *{balance:.2f} Taka — LOW! ⚠️*\n"
                 f"🕒 *Updated:* {time_info}\n\n"
             )
         else:
             message += (
                 f"✅ *Meter:* `{cust_no}`\n"
-                f"💰 *Balance:* 🟢 {balance:.2f} Taka\n"
+                f"💰 *Balance:* {balance:.2f} Taka\n"
                 f"🕒 *Updated:* {time_info}\n\n"
             )
 
