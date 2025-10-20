@@ -48,15 +48,28 @@ def get_balance_and_time(cust_no):
     return balance, time_info or "N/A"
 
 async def send_summary(results):
-    message = "💡 *NESCO Multi-Meter Summary*\n\n"
+    message = (
+        "💡 *NESCO Multi-Meter Summary*\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━\n"
+    )
     for cust_no, balance, time_info in results:
         if balance is None:
-            message += f"❌ `{cust_no}`: Could not fetch balance.\n"
+            message += f"❌ *Meter:* `{cust_no}`\n🔸 *Status:* Could not fetch balance\n\n"
         elif balance <= 50:
-            message += f"⚠️ `{cust_no}` → {balance:.2f} Taka (Low Balance!)\n🕒 {time_info}\n\n"
+            message += (
+                f"⚠️ *Meter:* `{cust_no}`\n"
+                f"💰 *Balance:* {balance:.2f} Taka (Low!)\n"
+                f"🕒 *Updated:* {time_info}\n\n"
+            )
         else:
-            message += f"✅ `{cust_no}` → {balance:.2f} Taka\n🕒 {time_info}\n\n"
+            message += (
+                f"✅ *Meter:* `{cust_no}`\n"
+                f"💰 *Balance:* {balance:.2f} Taka\n"
+                f"🕒 *Updated:* {time_info}\n\n"
+            )
+    message += "━━━━━━━━━━━━━━━━━━━━━━━\n📅 *Auto Updated by NESCO Bot*"
     await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="Markdown")
+
 
 def main():
     results = []
