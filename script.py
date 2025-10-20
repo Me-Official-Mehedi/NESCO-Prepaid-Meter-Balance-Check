@@ -12,23 +12,22 @@ BOT_TOKEN = os.environ['BOT_TOKEN']
 CHAT_ID = os.environ['CHAT_ID']
 URL = "https://customer.nesco.gov.bd/pre/panel"
 
-# Comma-separated customer numbers (e.g., "11900874,12345678,87654321")
+# Comma-separated customer numbers
 CUST_NUMBERS = os.environ.get('CUST_NO', '11900873,11900874').split(',')
 
 bot = Bot(token=BOT_TOKEN)
 session = requests.Session()
 
-# ====== Utility to escape MarkdownV2 ======
-def escape_md(text):
-    escape_chars = r'\_*[]()~`>#+-=|{}.!'
-    text = str(text)
-    # replace em dash with normal dash
-    text = text.replace("—", "-")
-    return re.sub(f'([{re.escape(escape_chars)}])', r'\\\1', text)
 
 # ====== Fetch balance and update time with retry ======
 def get_balance_and_time(cust_no, retries=3, delay=5):
-    for attempt in range(retries):
+    """
+    Fetch balance and last update time for a customer.
+    retries: number of retry attempts on failure
+    delay: seconds to wait between retries
+    """
+    attempt = 0
+    while attempt < retries:
         try:
             resp = session.get(URL, timeout=20)
             resp.raise_for_status()
@@ -37,7 +36,7 @@ def get_balance_and_time(cust_no, retries=3, delay=5):
             token_input = soup.find("input", {"name": "_token"})
             token = token_input["value"] if token_input else None
             if not token:
-                raise ValueError("Token not found")
+                raise ValueError("CSRF token not found")
 
             data = {"_token": token, "cust_no": cust_no, "submit": "রিচার্জ হিস্ট্রি"}
             post = session.post(URL, data=data, timeout=20)
@@ -51,7 +50,7 @@ def get_balance_and_time(cust_no, retries=3, delay=5):
                 balance = float(val)
 
             # Extract last update info
-            time_info = "N/A"
+            time_info = None
             labels = soup.find_all("label")
             for lab in labels:
                 if "অবশিষ্ট ব্যালেন্স" in lab.get_text():
@@ -65,67 +64,63 @@ def get_balance_and_time(cust_no, retries=3, delay=5):
                             time_info = raw_time
                     break
 
-            return balance, time_info
+            return balance, time_info or "N/A"
 
         except Exception as e:
-            print(f"Attempt {attempt + 1} failed for {cust_no}: {e}")
-            if attempt < retries - 1:
-                time.sleep(delay)
+            attempt += 1
+            print(f"Error fetching {cust_no} (Attempt {attempt}/{retries}): {e}")
+            if attempt < retries:
+                time.sleep(delay)  # wait before retrying
             else:
                 return None, None
+
 
 # ====== Send formatted Telegram summary ======
 async def send_summary(results):
     message = (
-        "*💡 NESCO Multi-Meter Summary*\n"
+        "💡 *NESCO Multi-Meter Summary*\n"
         "━━━━━━━━━━━━━━━━━━━━━━━\n"
     )
 
-    low_balance_list = []
+    low_balance_list = []  # store (cust_no, balance, time_info)
 
     for cust_no, balance, time_info in results:
-        cust_md = escape_md(cust_no)
-        time_md = escape_md(time_info)
-
         if balance is None:
             message += (
-                f"❌ *Meter:* `{cust_md}`\n"
+                f"❌ *Meter:* `{cust_no}`\n"
                 f"🔸 *Status:* Could not fetch balance.\n\n"
             )
         elif balance <= 50:
-            low_balance_list.append((cust_md, balance, time_md))
-            balance_msg = escape_md(f"{balance:.2f} Taka - LOW! ⚠️")
+            low_balance_list.append((cust_no, balance, time_info))
             message += (
-                f"⚠️ *Meter:* `{cust_md}`\n"
-                f"💰 *Balance:* *{balance_msg}*\n"
-                f"🕒 *Updated:* {time_md}\n\n"
+                f"⚠️ *Meter:* `{cust_no}`\n"
+                f"💰 *Balance:* *{balance:.2f} Taka — LOW! ⚠️*\n"
+                f"🕒 *Updated:* {time_info}\n\n"
             )
         else:
-            balance_msg = escape_md(f"{balance:.2f} Taka")
             message += (
-                f"✅ *Meter:* `{cust_md}`\n"
-                f"💰 *Balance:* {balance_msg}\n"
-                f"🕒 *Updated:* {time_md}\n\n"
+                f"✅ *Meter:* `{cust_no}`\n"
+                f"💰 *Balance:* {balance:.2f} Taka\n"
+                f"🕒 *Updated:* {time_info}\n\n"
             )
 
     message += "🤖 Auto Update via [Mehedi's](https://www.facebook.com/Me.OfficialMehedi) Bot"
 
     # Send main summary
-    await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="MarkdownV2")
+    await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="Markdown")
 
-    # Send extra low balance alert
+    # Send extra low balance alert with details
     if low_balance_list:
-        alert_msg = "*🚨 LOW BALANCE ALERT!*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
+        alert_msg = "🚨 *LOW BALANCE ALERT!*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
         for cust_no, balance, time_info in low_balance_list:
-            balance_msg = escape_md(f"{balance:.2f} Taka")
             alert_msg += (
                 f"⚠️ *Meter:* `{cust_no}`\n"
-                f"💰 *Current Balance:* *{balance_msg}*\n"
+                f"💰 *Current Balance:* *{balance:.2f} Taka*\n"
                 f"🕒 *Updated:* {time_info}\n\n"
             )
         alert_msg += "❌ Please recharge soon to avoid power cut ⚡"
 
-        await bot.send_message(chat_id=CHAT_ID, text=alert_msg, parse_mode="MarkdownV2")
+        await bot.send_message(chat_id=CHAT_ID, text=alert_msg, parse_mode="Markdown")
 
 
 # ====== Main Runner ======
