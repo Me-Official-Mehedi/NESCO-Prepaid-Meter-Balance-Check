@@ -1,12 +1,10 @@
 import re
-import asyncio
 import requests
 from bs4 import BeautifulSoup
 from telegram import Bot
 import os
 from datetime import datetime
-import schedule
-import time
+import asyncio
 
 # ====== Configuration ======
 BOT_TOKEN = os.environ['BOT_TOKEN']
@@ -14,10 +12,11 @@ CHAT_ID = os.environ['CHAT_ID']
 URL = "https://customer.nesco.gov.bd/pre/panel"
 
 # Single customer number
-CUST_NO = os.environ.get('CUST_NO', '11900874')
+CUST_NO = os.environ.get('CUST_NO', '11900873')
 
 bot = Bot(token=BOT_TOKEN)
 session = requests.Session()
+
 
 # ====== Fetch balance and update time ======
 def get_balance_and_time(cust_no):
@@ -67,63 +66,50 @@ def get_balance_and_time(cust_no):
         return None, None
 
 
-# ====== Send Telegram summary like multi-meter ======
+# ====== Send formatted Telegram summary ======
 async def send_summary(cust_no, balance, time_info):
-    message = (
-        "💡 *NESCO Meter Summary*\n"
-        "━━━━━━━━━━━━━━━━━━━━━━━\n"
-    )
-    low_balance_list = []
+    message = "💡 *NESCO Single Meter Summary*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
+    low_balance_alert = False
 
     if balance is None:
         message += (
-            f"❌ *Meter:* `{cust_no}`\n"
+            f"❌ *Meter:* {cust_no}\n"
             f"🔸 *Status:* Could not fetch balance.\n\n"
         )
     elif balance <= 50:
-        low_balance_list.append((cust_no, balance, time_info))
+        low_balance_alert = True
         message += (
-            f"⚠️ *Meter:* `{cust_no}`\n"
+            f"⚠️ *Meter:* {cust_no}\n"
             f"💰 *Balance:* *{balance:.2f} Taka — LOW! ⚠️*\n"
             f"🕒 *Updated:* {time_info}\n\n"
         )
     else:
         message += (
-            f"✅ *Meter:* `{cust_no}`\n"
+            f"✅ *Meter:* {cust_no}\n"
             f"💰 *Balance:* {balance:.2f} Taka\n"
             f"🕒 *Updated:* {time_info}\n\n"
         )
 
     message += "🤖 Auto Update via [Mehedi's](https://www.facebook.com/Me.OfficialMehedi) Bot"
-
-    # Send main summary
     await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="Markdown")
 
-    # Send separate low-balance alert
-    if low_balance_list:
-        alert_msg = "🚨 *LOW BALANCE ALERT!*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
-        for c, bal, t in low_balance_list:
-            alert_msg += (
-                f"⚠️ *Meter:* `{c}`\n"
-                f"💰 *Current Balance:* *{bal:.2f} Taka*\n"
-                f"🕒 *Updated:* {t}\n\n"
-            )
-        alert_msg += "❌ Please recharge soon to avoid power cut ⚡"
+    # Separate LOW BALANCE ALERT message
+    if low_balance_alert:
+        alert_msg = (
+            "🚨 *LOW BALANCE ALERT!*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"⚠️ *Meter:* {cust_no}\n"
+            f"💰 *Current Balance:* *{balance:.2f} Taka*\n"
+            f"🕒 *Updated:* {time_info}\n\n"
+            "❌ Please recharge soon to avoid power cut ⚡"
+        )
         await bot.send_message(chat_id=CHAT_ID, text=alert_msg, parse_mode="Markdown")
 
 
 # ====== Main Runner ======
 def main():
-    bal, time_info = get_balance_and_time(CUST_NO)
-    asyncio.run(send_summary(CUST_NO, bal, time_info))
+    balance, time_info = get_balance_and_time(CUST_NO)
+    asyncio.run(send_summary(CUST_NO, balance, time_info))
 
 
-# ====== Scheduler (Daily run) ======
-# Example: every day at 15:55 (3:55 PM)
-schedule.every().day.at("15:55").do(main)
-
-print("Scheduler started. Waiting for scheduled time...")
-
-while True:
-    schedule.run_pending()
-    time.sleep(10)
+if __name__ == "__main__":
+    main()
