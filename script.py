@@ -89,7 +89,7 @@ async def send_summary(results):
                 f"🕒 *Updated:* {time_info}\n\n"
             )
 
-    message += "━━━━━━━━━━━━━━━━━━━━━━━\n *🤖 Auto Update via Mehedi's Bot*"
+    message += "🤖 Auto Update via [Mehedi's Bot](https://www.facebook.com/Me.OfficialMehedi)"
 
     # Send main summary
     await bot.send_message(chat_id=CHAT_ID, text=message, parse_mode="Markdown")
