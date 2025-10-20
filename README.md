@@ -141,7 +141,7 @@ Customize Python script to add more functionality like notifications for low bal
 
 ## ❤️ Support
 
-For issues, please open a GitHub Issue in the repository...
+For issues, please open a GitHub Issue in the repository.
 
 ## Dev Contact
 Name: Md. Mehedi Hasan
