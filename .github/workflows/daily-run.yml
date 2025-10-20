@@ -32,4 +32,5 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
           CUST_NO: ${{ secrets.CUST_NO }}
-        run: python Single Time Update Per Day/single_meter.py
+        run: python "Single Time Update Per Day/single_meter.py"
+
