@@ -13,7 +13,7 @@ Automate your **NESCO prepaid electricity meter balance checking** using **Pytho
 8. [📂 Project Structure](#-project-structure)  
 9. [🖥️ Output](#️-output)  
 10. [💡 Tips](#-tips)  
-11. [❤️ Support](#-support)  
+11. [❤️ Support](#support)  
 12. [👨‍💻 Dev Contact](#dev-contact)
 
 ## 📌 Features
@@ -147,7 +147,7 @@ Customize Python script to add more functionality like notifications for low bal
 
 For issues, please open a GitHub Issue in the repository.
 
-## Dev Contact
+## 👨‍💻 Dev Contact
 Name: Md. Mehedi Hasan
 
 Designation : Sub Assistant Engineer (Circle-2, NESCO, Rangpur)
