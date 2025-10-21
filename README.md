@@ -127,7 +127,6 @@ Check your Telegram — your bot should send the balance message.
 ## 📂 Project Structure
 <img width="355" height="224" alt="image" src="https://github.com/user-attachments/assets/c16af960-fc60-4481-96b0-760b25633694" />
 
-
 ## 🖥️ Output
 ![WhatsApp Image 2025-10-21 at 11 01 20_1cb5bdbd](https://github.com/user-attachments/assets/2372d1b4-de71-4464-b944-c513b515b3bd)
 
