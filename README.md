@@ -18,9 +18,6 @@ Automate your **NESCO prepaid electricity meter balance checking** using **Pytho
 12. [❤️ Support](#-support)  
 13. [👨‍💻 Dev Contact](#-dev-contact)
 
-
----
-
 ## 📌 Features
 
 - ✅ Automatic daily meter balance check  
@@ -29,7 +26,6 @@ Automate your **NESCO prepaid electricity meter balance checking** using **Pytho
 - ✅ Secure storage of sensitive data (Bot token, Chat ID, Consumer Number) using **GitHub Secrets**  
 - ✅ Fully customizable schedule  
 
----
 
 ## 🚀 Requirements
 
@@ -40,8 +36,6 @@ Before setup, you need:
 3. **GitHub Account** – To host the script and run workflows.  
 4. **Prepaid Meter Consumer Number** – Your NESCO meter consumer number.  
 5. **Python 3.12+** installed locally (for local testing, optional).  
-
----
 
 ## 📝 Step 1: Create GitHub Repository
 
@@ -55,8 +49,6 @@ Before setup, you need:
 8. Click **Commit new file**.  
 
 > Your script is now safely in the repository.
-
----
 
 ## 🔒 Step 2: Secure Your Secrets with GitHub
 
@@ -73,8 +65,6 @@ Do **not** store sensitive info directly in your code. Use **GitHub Secrets**:
 | `CUST_NO` | Your Prepaid Meter Consumer Number | e.g., `11900874` |
 
 > Secrets are encrypted and accessible only during GitHub Actions runs.
-
----
 
 ## 🖥 Step 3: Update Script to Use Environment Variables
 
