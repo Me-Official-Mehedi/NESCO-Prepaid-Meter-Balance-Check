@@ -129,7 +129,7 @@ Check your Telegram — your bot should send the balance message.
 
 
 ## 🖥️ Output
-![WhatsApp Image 2025-10-18 at 11 19 46_5517e4ad](https://github.com/user-attachments/assets/eaf203af-334d-47c1-ab6b-ad9348cac7f8)
+![unnamed](https://github.com/user-attachments/assets/a179a343-bf8b-4c80-ba2d-d46a58fb3914)
 
 ## 💡 Tips
 
