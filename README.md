@@ -146,6 +146,8 @@ For issues, please open a GitHub Issue in the repository.
 ## Dev Contact
 Name: Md. Mehedi Hasan
 
+Designation : Sub Assistant Engineer (Circle-2, NESCO, Rangpur)
+
 Email: hasanmehedi04286@gamil.com
 
 Mobile: 01796890184
