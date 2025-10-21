@@ -13,8 +13,8 @@ Automate your **NESCO prepaid electricity meter balance checking** using **Pytho
 8. [📂 Project Structure](#-project-structure)  
 9. [🖥️ Output](#️-output)  
 10. [💡 Tips](#-tips)  
-11. [❤️ Support](#-support)  
-12. [👨‍💻 Dev Contact](#-dev-contact)
+11. [❤️ Support](#support)  
+12. [👨‍💻 Dev Contact](#dev-contact)
 
 ## 📌 Features
 
