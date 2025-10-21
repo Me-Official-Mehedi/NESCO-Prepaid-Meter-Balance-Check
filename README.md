@@ -2,6 +2,23 @@
 
 Automate your **NESCO prepaid electricity meter balance checking** using **Python** and **Telegram**. Receive your daily meter balance directly on Telegram without manual checking.  
 
+
+## 📚 Table of Contents
+1. [⚡ NESCO Prepaid Meter Balance Checker](#-nesco-prepaid-meter-balance-checker)  
+2. [📌 Features](#-features)  
+3. [🚀 Requirements](#-requirements)  
+4. [📝 Step 1: Create GitHub Repository](#-step-1-create-github-repository)  
+5. [🔒 Step 2: Secure Your Secrets with GitHub](#-step-2-secure-your-secrets-with-github)  
+6. [🖥 Step 3: Update Script to Use Environment Variables](#-step-3-update-script-to-use-environment-variables)  
+7. [⚙ Step 4: Set Up GitHub Actions Workflow](#-step-4-set-up-github-actions-workflow)  
+8. [🧪 Step 5: Test the Workflow](#-step-5-test-the-workflow)  
+9. [📂 Project Structure](#-project-structure)  
+10. [🖥️ Output](#️-output)  
+11. [💡 Tips](#-tips)  
+12. [❤️ Support](#-support)  
+13. [👨‍💻 Dev Contact](#-dev-contact)
+
+
 ---
 
 ## 📌 Features
