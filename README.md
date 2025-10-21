@@ -2,7 +2,6 @@
 
 Automate your **NESCO prepaid electricity meter balance checking** using **Python** and **Telegram**. Receive your daily meter balance directly on Telegram without manual checking.  
 
-
 ## 📚 Table of Contents
 1. [📌 Features](#features)  
 2. [🚀 Requirements](#requirements)  
