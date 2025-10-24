@@ -68,7 +68,7 @@ def get_balance_and_time(cust_no):
 
 # ====== Send formatted Telegram summary ======
 async def send_summary(cust_no, balance, time_info):
-    message = "💡 *NESCO Prepaid Meter Info*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
+    message = "💡 *NESCO Single Meter Summary*\n━━━━━━━━━━━━━━━━━━━━━━━\n"
     low_balance_alert = False
 
     if balance is None:
