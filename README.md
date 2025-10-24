@@ -16,6 +16,35 @@ Automate your **NESCO prepaid electricity meter balance checking** using **Pytho
 11. [❤️ Support](#️-support)  
 12. [👨‍💻 Dev Contact](#-dev-contact)
 
+## 🧠 Concept Overview
+
+There are two modes of operation depending on your need:
+
+🔁 1. Multiple Time Update Per Day
+
+Sends 3 updates per day if balance ≤ 50
+
+Sends 1 update per day if balance > 50
+
+Useful for frequent balance monitoring (for example, multiple meters at home)
+
+☀️ 2. Single Time Update Per Day
+
+Sends only one update per day, regardless of balance
+
+Suitable for simple daily balance summary
+
+
+## 🧩 Script Types
+
+Each mode contains two versions of scripts:
+
+Script Name	Description
+single_meter.py	Use this if you have only one meter.
+multiple_meter.py	Use this if you have more than one meter.
+
+Each version also has a corresponding workflow file to match it.
+
 ## 📌 Features
 
 - ✅ Automatic daily meter balance check  
@@ -130,7 +159,8 @@ Click Run workflow to test immediately.
 Check your Telegram — your bot should send the balance message.
 
 ## 📂 Project Structure
-<img width="355" height="224" alt="image" src="https://github.com/user-attachments/assets/c16af960-fc60-4481-96b0-760b25633694" />
+<img width="796" height="591" alt="image" src="https://github.com/user-attachments/assets/5bd8e1b5-93a8-4f9f-a2a2-17e62b94b36c" />
+
 
 ## 🖥️ Output
 ![WhatsApp Image 2025-10-21 at 11 01 20_1cb5bdbd](https://github.com/user-attachments/assets/2372d1b4-de71-4464-b944-c513b515b3bd)
