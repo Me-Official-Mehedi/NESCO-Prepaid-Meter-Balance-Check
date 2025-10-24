@@ -3,18 +3,21 @@
 Automate your **NESCO prepaid electricity meter balance checking** using **Python** and **Telegram**. Receive your daily meter balance directly on Telegram without manual checking.  
 
 ## 📚 Table of Contents
-1. [📌 Features](#-features)  
-2. [🚀 Requirements](#-requirements)  
-3. [📝 Step 1: Create GitHub Repository](#-step-1-create-github-repository)  
-4. [🔒 Step 2: Secure Your Secrets with GitHub](#-step-2-secure-your-secrets-with-github)  
+1. [🧠 Concept Overview](#-concept-overview)
+2. [🧩 Script Types](#-script-types)
+3. [📌 Features](#-features)  
+4. [🚀 Requirements](#-requirements)  
+5. [📝 Step 1: Create GitHub Repository](#-step-1-create-github-repository)  
+6. [🔒 Step 2: Secure Your Secrets with GitHub](#-step-2-secure-your-secrets-with-github)  
 5. [🖥 Step 3: Update Script to Use Environment Variables](#-step-3-update-script-to-use-environment-variables)  
-6. [⚙ Step 4: Set Up GitHub Actions Workflow](#-step-4-set-up-github-actions-workflow)  
-7. [🧪 Step 5: Test the Workflow](#-step-5-test-the-workflow)  
-8. [📂 Project Structure](#-project-structure)  
-9. [🖥️ Output](#️-output)  
-10. [💡 Tips](#-tips)  
-11. [❤️ Support](#️-support)  
-12. [👨‍💻 Dev Contact](#-dev-contact)
+7. [⚙ Step 4: Set Up GitHub Actions Workflow](#-step-4-set-up-github-actions-workflow)  
+8. [🧪 Step 5: Test the Workflow](#-step-5-test-the-workflow)  
+10. [📂 Project Structure](#-project-structure)  
+11. [🖥️ Output](#️-output)
+12. [🧭 Choose Your Mode](#-choose-your-mode)
+13. [💡 Tips](#-tips)  
+14. [❤️ Support](#️-support)  
+15. [👨‍💻 Dev Contact](#-dev-contact)
 
 ## 🧠 Concept Overview
 
@@ -22,28 +25,31 @@ There are two modes of operation depending on your need:
 
 🔁 1. Multiple Time Update Per Day
 
-Sends 3 updates per day if balance ≤ 50
+> Sends 3 updates per day if balance ≤ 50
 
-Sends 1 update per day if balance > 50
+> Sends 1 update per day if balance > 50
 
 Useful for frequent balance monitoring (for example, multiple meters at home)
 
+
 ☀️ 2. Single Time Update Per Day
 
-Sends only one update per day, regardless of balance
+> Sends only one update per day, regardless of balance
 
-Suitable for simple daily balance summary
+> Suitable for simple daily balance summary
 
 
 ## 🧩 Script Types
 
 Each mode contains two versions of scripts:
 
-Script Name	Description
-single_meter.py	Use this if you have only one meter.
-multiple_meter.py	Use this if you have more than one meter.
+| 🧾 Script Name | ⚙️ Description |
+|----------------|----------------|
+| `single_meter.py` | Use this if you have **only one meter**. |
+| `multiple_meter.py` | Use this if you have **more than one meter**. |
 
-Each version also has a corresponding workflow file to match it.
+Each version also has a corresponding **workflow file** to match it.
+
 
 ## 📌 Features
 
@@ -164,6 +170,32 @@ Check your Telegram — your bot should send the balance message.
 
 ## 🖥️ Output
 ![WhatsApp Image 2025-10-21 at 11 01 20_1cb5bdbd](https://github.com/user-attachments/assets/2372d1b4-de71-4464-b944-c513b515b3bd)
+
+## 🧭 Choose Your Mode
+
+Depending on your needs, replace the files as follows:
+
+✅ For Single Meter + Single Time Update
+
+```
+script.py → Single Time Update Per Day/single_meter.py
+.github/workflows/daily-run.yml → Single Time Update Per Day/single_meter_workflow
+```
+✅ For Multiple Meters + Single Time Update
+```
+script.py → Single Time Update Per Day/multiple_meter.py
+.github/workflows/daily-run.yml → Single Time Update Per Day/multiple_meter_workflow
+```
+✅ For Single Meter + Multiple Time Update
+```
+script.py → Multiple Time Update Per Day/single_meter.py
+.github/workflows/daily-run.yml → Multiple Time Update Per Day/single_meter_workflow
+```
+✅ For Multiple Meters + Multiple Time Update
+```
+script.py → Multiple Time Update Per Day/multiple_meter.py
+.github/workflows/daily-run.yml → Multiple Time Update Per Day/multiple_meter_workflow
+```
 
 ## 💡 Tips
 
