@@ -4,20 +4,21 @@ Automate your **NESCO prepaid electricity meter balance checking** using **Pytho
 
 ## 📚 Table of Contents
 1. [🧠 Concept Overview](#-concept-overview)
-2. [🧩 Script Types](#-script-types)
-3. [📌 Features](#-features)  
-4. [🚀 Requirements](#-requirements)  
-5. [📝 Step 1: Create GitHub Repository](#-step-1-create-github-repository)  
-6. [🔒 Step 2: Secure Your Secrets with GitHub](#-step-2-secure-your-secrets-with-github)  
-5. [🖥 Step 3: Update Script to Use Environment Variables](#-step-3-update-script-to-use-environment-variables)  
-7. [⚙ Step 4: Set Up GitHub Actions Workflow](#-step-4-set-up-github-actions-workflow)  
-8. [🧪 Step 5: Test the Workflow](#-step-5-test-the-workflow)  
-10. [📂 Project Structure](#-project-structure)  
-11. [🖥️ Output](#️-output)
-12. [🧭 Choose Your Mode](#-choose-your-mode)
-13. [💡 Tips](#-tips)  
-14. [❤️ Support](#️-support)  
-15. [👨‍💻 Dev Contact](#-dev-contact)
+2. [📁 Folder Contents](#-folder-contents)
+3. [🧩 Script Types](#-script-types)
+4. [📌 Features](#-features)  
+5. [🚀 Requirements](#-requirements)  
+6. [📝 Step 1: Create GitHub Repository](#-step-1-create-github-repository)  
+7. [🔒 Step 2: Secure Your Secrets with GitHub](#-step-2-secure-your-secrets-with-github)  
+8. [🖥 Step 3: Update Script to Use Environment Variables](#-step-3-update-script-to-use-environment-variables)  
+9. [⚙ Step 4: Set Up GitHub Actions Workflow](#-step-4-set-up-github-actions-workflow)  
+10. [🧪 Step 5: Test the Workflow](#-step-5-test-the-workflow)  
+11. [📂 Project Structure](#-project-structure)  
+12. [🖥️ Output](#️-output)
+13. [🧭 Choose Your Mode](#-choose-your-mode)
+14. [💡 Tips](#-tips)  
+15. [❤️ Support](#️-support)  
+16. [👨‍💻 Dev Contact](#-dev-contact)
 
 ## 🧠 Concept Overview
 
@@ -38,6 +39,20 @@ Useful for frequent balance monitoring (for example, multiple meters at home)
 
 > Suitable for simple daily balance summary
 
+## 📁 Folder Contents
+
+Each folder contains four files — two Python scripts and two matching workflow files:
+
+| 📂 Folder Name | 🧾 File Name | ⚙️ Description |
+|----------------|--------------|----------------|
+| **Multiple Time Update Per Day/** | `single_meter.py` | Sends updates **3 times a day** if balance ≤ 50, otherwise once per day — for **single meter**. |
+| | `multiple_meter.py` | Same rule as above but for **multiple meters**. |
+| | `single_meter_workflow` | Workflow file for single meter mode. |
+| | `multiple_meter_workflow` | Workflow file for multiple meter mode. |
+| **Single Time Update Per Day/** | `single_meter.py` | Sends update **only once per day**, regardless of balance — for **single meter**. |
+| | `multiple_meter.py` | Same rule as above but for **multiple meters**. |
+| | `single_meter_workflow` | Workflow file for single meter mode. |
+| | `multiple_meter_workflow` | Workflow file for multiple meter mode. |
 
 ## 🧩 Script Types
 
@@ -49,23 +64,6 @@ Each mode contains two versions of scripts:
 | `multiple_meter.py` | Use this if you have **more than one meter**. |
 
 Each version also has a corresponding **workflow file** to match it.
-
-## 📁 Folder Contents
-
-Each folder contains four files — two Python scripts and two matching workflow files:
-
-| 📂 Folder Name | 🧾 File Name | ⚙️ Description |
-|----------------|--------------|----------------|
-| Multiple Time Update Per Day | `single_meter.py` | Sends updates **3 times a day** if balance ≤ 50, otherwise once per day — for **single meter**. |
-| | `multiple_meter.py` | Same rule as above but for **multiple meters**. |
-| | `single_meter_workflow` | Workflow file for single meter mode. |
-| | `multiple_meter_workflow` | Workflow file for multiple meter mode. |
-| **Single Time Update Per Day/** | `single_meter.py` | Sends update **only once per day**, regardless of balance — for **single meter**. |
-| | `multiple_meter.py` | Same rule as above but for **multiple meters**. |
-| | `single_meter_workflow` | Workflow file for single meter mode. |
-| | `multiple_meter_workflow` | Workflow file for multiple meter mode. |
-
-
 
 ## 📌 Features
 
