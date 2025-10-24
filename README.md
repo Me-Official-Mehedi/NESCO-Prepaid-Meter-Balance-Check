@@ -230,6 +230,4 @@ Designation : Sub Assistant Engineer (Circle-2, NESCO, Rangpur)
 
 Email: hasanmehedi04286@gamil.com
 
-Mobile: 01796890184
-
 HRO: HRO-8168
