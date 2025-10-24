@@ -56,7 +56,7 @@ Each folder contains four files — two Python scripts and two matching workflow
 
 | 📂 Folder Name | 🧾 File Name | ⚙️ Description |
 |----------------|--------------|----------------|
-| **Multiple Time Update Per Day/** | `single_meter.py` | Sends updates **3 times a day** if balance ≤ 50, otherwise once per day — for **single meter**. |
+| Multiple Time Update Per Day | `single_meter.py` | Sends updates **3 times a day** if balance ≤ 50, otherwise once per day — for **single meter**. |
 | | `multiple_meter.py` | Same rule as above but for **multiple meters**. |
 | | `single_meter_workflow` | Workflow file for single meter mode. |
 | | `multiple_meter_workflow` | Workflow file for multiple meter mode. |
