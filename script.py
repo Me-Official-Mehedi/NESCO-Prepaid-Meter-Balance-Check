@@ -12,7 +12,7 @@ CHAT_ID = os.environ['CHAT_ID']
 URL = "https://customer.nesco.gov.bd/pre/panel"
 
 # Comma-separated customer numbers (e.g., "11900874,18030979")
-CUST_NUMBERS = os.environ.get('CUST_NO', '11900873,18030979').split(',')
+CUST_NUMBERS = os.environ.get('CUST_NO', '11900873,18030979,18037604').split(',')
 
 bot = Bot(token=BOT_TOKEN)
 session = requests.Session()
