@@ -1,9 +1,9 @@
-name: NESCO Single-Meter Balance Check
+name: NESCO Multi-Meter Balance Check
 
 on:
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:  # Keep for manual tests
   schedule:
-    - cron: '0 4 * * *'  # 4:00 AM UTC (10:00 AM BST)
+    - cron: '0 4 * * *'  # Runs at 4:00 AM UTC daily (which is 10:00 AM BST).
 
 jobs:
   run-script:
@@ -32,5 +32,4 @@ jobs:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
           CUST_NO: ${{ secrets.CUST_NO }}
-        run: python "Single Time Update Per Day/single_meter.py"
-
+        run: python "Single Time Update Per Day/multiple_meter.py"
