@@ -43,6 +43,7 @@ Useful for frequent balance monitoring (for example, multiple meters at home)
 
 Each folder contains four files — two Python scripts and two matching workflow files:
 
+```
 <table>
   <thead>
     <tr>
@@ -89,6 +90,7 @@ Each folder contains four files — two Python scripts and two matching workflow
     </tr>
   </tbody>
 </table>
+```
 
 
 ## 🧩 Script Types
