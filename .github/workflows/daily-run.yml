@@ -3,7 +3,7 @@ name: NESCO Multi-Meter Balance Check
 on:
   workflow_dispatch:  # Keep for manual tests
   schedule:
-    - cron: '0 4 * * *'  # Runs at 4:00 AM UTC daily (which is 10:00 AM BST).
+    - cron: '46 4 * * *'  # Runs at 4:00 AM UTC daily (which is 10:00 AM BST).
 
 jobs:
   run-script:
