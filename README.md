@@ -53,24 +53,6 @@ Each folder contains four files — two Python scripts and two matching workflow
   </thead>
   <tbody>
     <tr>
-      <td rowspan="4"><b>Multiple Time Update Per Day/</b></td>
-      <td><code>single_meter.py</code></td>
-      <td>Sends updates <b>3 times a day</b> if balance ≤ 50, otherwise once per day — for <b>single meter</b>.</td>
-    </tr>
-    <tr>
-      <td><code>multiple_meter.py</code></td>
-      <td>Same rule as above but for <b>multiple meters</b>.</td>
-    </tr>
-    <tr>
-      <td><code>single_meter_workflow</code></td>
-      <td>Workflow file for single meter mode.</td>
-    </tr>
-    <tr>
-      <td><code>multiple_meter_workflow</code></td>
-      <td>Workflow file for multiple meter mode.</td>
-    </tr>
-
-    <tr>
       <td rowspan="4"><b>Single Time Update Per Day/</b></td>
       <td><code>single_meter.py</code></td>
       <td>Sends update <b>only once per day</b>, regardless of balance — for <b>single meter</b>.</td>
@@ -89,6 +71,7 @@ Each folder contains four files — two Python scripts and two matching workflow
     </tr>
   </tbody>
 </table>
+
 
 
 ## 🧩 Script Types
