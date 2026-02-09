@@ -223,7 +223,7 @@ Customize Python script to add more functionality like notifications for low bal
 
 For issues, please open a GitHub Issue in the repository.
 
-## 👨‍💻 Dev Contact
+## 👨‍💻 Dev Contact-
 Name: Md. Mehedi Hasan
 
 Designation : Sub Assistant Engineer (Circle-2, NESCO, Rangpur)
