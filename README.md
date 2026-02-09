@@ -43,16 +43,53 @@ Useful for frequent balance monitoring (for example, multiple meters at home)
 
 Each folder contains four files — two Python scripts and two matching workflow files:
 
-| 📂 Folder Name | 🧾 File Name | ⚙️ Description |
-|----------------|--------------|----------------|
-| **Multiple Time Update Per Day/** | `single_meter.py` | Sends updates **3 times a day** if balance ≤ 50, otherwise once per day — for **single meter**. |
-| | `multiple_meter.py` | Same rule as above but for **multiple meters**. |
-| | `single_meter_workflow` | Workflow file for single meter mode. |
-| | `multiple_meter_workflow` | Workflow file for multiple meter mode. |
-| **Single Time Update Per Day/** | `single_meter.py` | Sends update **only once per day**, regardless of balance — for **single meter**. |
-| | `multiple_meter.py` | Same rule as above but for **multiple meters**. |
-| | `single_meter_workflow` | Workflow file for single meter mode. |
-| | `multiple_meter_workflow` | Workflow file for multiple meter mode. |
+<table>
+  <thead>
+    <tr>
+      <th>📂 Folder Name</th>
+      <th>🧾 File Name</th>
+      <th>⚙️ Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="4"><b>Multiple Time Update Per Day/</b></td>
+      <td><code>single_meter.py</code></td>
+      <td>Sends updates <b>3 times a day</b> if balance ≤ 50, otherwise once per day — for <b>single meter</b>.</td>
+    </tr>
+    <tr>
+      <td><code>multiple_meter.py</code></td>
+      <td>Same rule as above but for <b>multiple meters</b>.</td>
+    </tr>
+    <tr>
+      <td><code>single_meter_workflow</code></td>
+      <td>Workflow file for single meter mode.</td>
+    </tr>
+    <tr>
+      <td><code>multiple_meter_workflow</code></td>
+      <td>Workflow file for multiple meter mode.</td>
+    </tr>
+
+    <tr>
+      <td rowspan="4"><b>Single Time Update Per Day/</b></td>
+      <td><code>single_meter.py</code></td>
+      <td>Sends update <b>only once per day</b>, regardless of balance — for <b>single meter</b>.</td>
+    </tr>
+    <tr>
+      <td><code>multiple_meter.py</code></td>
+      <td>Same rule as above but for <b>multiple meters</b>.</td>
+    </tr>
+    <tr>
+      <td><code>single_meter_workflow</code></td>
+      <td>Workflow file for single meter mode.</td>
+    </tr>
+    <tr>
+      <td><code>multiple_meter_workflow</code></td>
+      <td>Workflow file for multiple meter mode.</td>
+    </tr>
+  </tbody>
+</table>
+
 
 ## 🧩 Script Types
 
