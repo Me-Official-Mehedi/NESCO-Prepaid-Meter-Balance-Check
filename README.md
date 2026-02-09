@@ -71,7 +71,15 @@ Each folder contains four files — two Python scripts and two matching workflow
       <td>Workflow file for multiple meter mode.</td>
     </tr>
 
-    <!-- Single Time Update Per Day -->
+<table>
+  <thead>
+    <tr>
+      <th>📂 Folder Name</th>
+      <th>🧾 File Name</th>
+      <th>⚙️ Description</th>
+    </tr>
+  </thead>
+  <tbody>
     <tr>
       <td rowspan="4"><b>Single Time Update Per Day/</b></td>
       <td><code>single_meter.py</code></td>
@@ -89,6 +97,9 @@ Each folder contains four files — two Python scripts and two matching workflow
       <td><code>multiple_meter_workflow</code></td>
       <td>Workflow file for multiple meter mode.</td>
     </tr>
+  </tbody>
+</table>
+
   </tbody>
 </table>
 
